@@ -1,36 +1,57 @@
-import { useState, useEffect } from "react";
+import { Form, Input, Button } from 'antd';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { regexpValidation } from '../../core/utilis/constants';
+import { auth } from '../../services/firebase'
+import { useState } from 'react';
 
 const Login = () => {
-    const [ page, setPage ] = useState(1);
-    const [ showModal, setShowModal ]= useState(false);
+     const [ form ] = Form.useForm();
+     const [ loading, setLoading ] = useState( false );
 
-    useEffect(() => {
-        fetch(`https://randomuser.me/api/?page=${page}&results=10&seed=abc`)
-        .then(resp=>{
-        return resp.json();
-        })  
-        .then(data=>{
-            console.log(data)
-        })
-    },[page]);
+     const handleLogin = async values => {
+                setLoading( true );
+                try{
+                const { email, password } = values;
+                const response=await signInWithEmailAndPassword( auth, email, password );
+                form.resetFields();
+                }catch( error ){
+                console.log( error );
+                }finally{
+                        setLoading( false );
+                };
+      };
 
-    const handleChangePagination = value => {
-        setPage(value=== 'next' ? page+1 : page-1);
-    };
-
-    return(<div>
-            <button onClick={()=>handleChangePagination('prev')}>prev</button>
-            <span>page={page}</span> 
-            <button onClick={()=>handleChangePagination('next')}>next</button> 
-            <br/>
-            <button onClick={()=>{setShowModal(!showModal)}}>{showModal?'Close Modal':'Show Modal'}</button>
-            {showModal && (
-                <div>
-                    <h2>Modal</h2>
-                </div>
-            )}
+        return(
+        <div>
+        <Form layput='vertical' onFinish={ handleLogin } form={ form }>
+                <Form.Item 
+                label='Email'
+                name='email'
+                rules={[{
+                        required:true,
+                        message:'Enter your email'
+                }]}
+                >
+                <Input type='email' placeholder='Email'></Input>
+                </Form.Item>
+                <Form.Item 
+                label='Password'
+                name='password'
+                tooltip='Password must be min 6 max 16 characters .....'
+                rules={[{
+                        required:true,
+                        message:'Enter your email'
+                },
+                {
+                pattern:regexpValidation,
+                message:'Wrong password'
+                }]}
+                >
+                <Input.Password placeholder='Password'/>
+                </Form.Item>
+                <Button type='primary' htmlType='submit' loading={ loading }>Sign In</Button>
+        </Form>
         </div>
-        );
-};
-
-export default Login;
+        )
+}
+export default Login
