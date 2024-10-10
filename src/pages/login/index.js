@@ -1,7 +1,8 @@
 import { Form, Input, Button } from 'antd';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { regexpValidation } from '../../core/utilis/constants';
+import { regexpValidation, ROUTE_CONSTANTS } from '../../core/utilis/constants';
 import { auth } from '../../services/firebase'
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
 const Login = () => {
@@ -50,6 +51,9 @@ const Login = () => {
                 <Input.Password placeholder='Password'/>
                 </Form.Item>
                 <Button type='primary' htmlType='submit' loading={ loading }>Sign In</Button>
+
+                <Link to={ROUTE_CONSTANTS.REGISTER}>Sign up</Link>
+
         </Form>
         </div>
         )

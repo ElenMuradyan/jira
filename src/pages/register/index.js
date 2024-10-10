@@ -3,6 +3,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../services/firebase";
 import { Form, Button, Input, notification } from 'antd';
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { ROUTE_CONSTANTS } from "../../core/utilis/constants";
 import './index.css';
 
 const Register= () => {
@@ -66,6 +68,9 @@ const Register= () => {
             <Input.Password placeholder="Password"/>
             </Form.Item>
             <Button type='primary' htmlType="submit" loading={ loading }>Sign up</Button>
+
+            <Link to={ROUTE_CONSTANTS.LOGIN}>Sign up</Link>
+
         </Form>
         </div>
     )
