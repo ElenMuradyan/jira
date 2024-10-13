@@ -1,11 +1,12 @@
 import React from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../services/firebase";
-import { Form, Button, Input, notification } from 'antd';
+import { auth } from "../../../services/firebase";
+import { Form, Button, Input, Flex } from 'antd';
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ROUTE_CONSTANTS } from "../../core/utilis/constants";
-import './index.css';
+import { ROUTE_CONSTANTS } from "../../../core/utilis/constants";
+import AuthWrapper from "../../../components/sheard/AuthWrapper";
+import RegisterBanner from "../../../core/Imgs/auth-register.jpg"
 
 const Register= () => {
     const [ form ] = Form.useForm();
@@ -25,7 +26,7 @@ const Register= () => {
     };
 
     return (
-        <div id='antd_container'>
+        <AuthWrapper title='Sign up' banner={RegisterBanner}>
         <Form onFinish={ handleRegister } layout='vertical' form={ form }>
             <Form.Item
             label='First name'
@@ -67,12 +68,12 @@ const Register= () => {
             >
             <Input.Password placeholder="Password"/>
             </Form.Item>
+            <Flex align="center" justify="flex-end" gap={'10px'}>
             <Button type='primary' htmlType="submit" loading={ loading }>Sign up</Button>
-
-            <Link to={ROUTE_CONSTANTS.LOGIN}>Sign up</Link>
-
+            <Link to={ROUTE_CONSTANTS.LOGIN}>Sign in</Link>
+            </Flex>
         </Form>
-        </div>
+        </AuthWrapper>
     )
 };
 
