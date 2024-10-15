@@ -1,4 +1,4 @@
-import { Form, Input, Button, Flex } from 'antd';
+import { Form, Input, Button, Flex, notification } from 'antd';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { regexpValidation, ROUTE_CONSTANTS } from '../../../core/utilis/constants';
 import { auth } from '../../../services/firebase'
@@ -18,7 +18,9 @@ const Login = () => {
                 const response=await signInWithEmailAndPassword( auth, email, password );
                 form.resetFields();
                 }catch( error ){
-                console.log( error );
+                        notification.error({
+                                message:'Invalid Login Credentials', 
+                        })
                 }finally{
                         setLoading( false );
                 };

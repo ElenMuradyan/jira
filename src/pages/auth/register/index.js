@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState }  from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../services/firebase";
-import { Form, Button, Input, Flex } from 'antd';
-import { useState } from "react";
+import { Form, Button, Input, Flex, notification } from 'antd';
 import { Link } from "react-router-dom";
 import { ROUTE_CONSTANTS } from "../../../core/utilis/constants";
 import AuthWrapper from "../../../components/sheard/AuthWrapper";
@@ -19,7 +18,9 @@ const Register= () => {
             await createUserWithEmailAndPassword( auth, email, password );
             form.resetFields();
         }catch(error){
-            console.log(error);
+            notification.error({
+                message:'Invalid Register Credentials'
+            })
         }finally{
             setLoading(false);
         };
@@ -67,6 +68,25 @@ const Register= () => {
             }]}
             >
             <Input.Password placeholder="Password"/>
+            </Form.Item>
+            <Form.Item
+            label='Config Password'
+            name='confirm'
+            dependencies={['password']}
+            rules={[{
+                required:true,
+                message:'Please input your password'
+            },
+            ({ getFieldValue }) => ({
+                validator(_,value){
+                if(!value||value===getFieldValue('password')){
+                    return Promise.resolve();
+                }
+                return Promise.reject(new Error('The new password that you entered does not match'));
+                }
+            })]}
+            >
+            <Input.Password placeholder="Config Password"></Input.Password>
             </Form.Item>
             <Flex align="center" justify="flex-end" gap={'10px'}>
             <Button type='primary' htmlType="submit" loading={ loading }>Sign up</Button>

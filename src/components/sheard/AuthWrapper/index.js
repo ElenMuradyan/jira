@@ -15,5 +15,5 @@ const AuthWrapper= ({ title, banner, children }) => {
             </div>
         </div>
     )
-} 
+};
 export default AuthWrapper;
