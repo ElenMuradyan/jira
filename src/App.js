@@ -1,4 +1,5 @@
 import { RouterProvider, createBrowserRouter, createRoutesFromElements, Route, Navigate } from "react-router-dom";
+import LoadingWrapper from "./components/sheard/LoadindWrapper";
 import { ROUTE_CONSTANTS } from "./core/utilis/constants";
 import { onAuthStateChanged } from 'firebase/auth';
 import { Login, Register } from './pages/auth';
@@ -10,25 +11,31 @@ import "./styles/global.css";
 
 const App=()=>{
   const [ IsAuth, setIsAuth ] = useState(false);
+  const [ loading, setLoading ] = useState(true);
 
   useEffect(()=>{
-  onAuthStateChanged(auth, (user)=>{
+
+  onAuthStateChanged(auth, (user) => {
+    setLoading(false);
     setIsAuth(Boolean(user));
   })
   },[]);
 
   return (
-    <RouterProvider router={
+    <LoadingWrapper loading={loading}>
+ <RouterProvider 
+    router={
       createBrowserRouter(
         createRoutesFromElements(
           <Route path='/' element={<MainLayout />}>
-             <Route path={ROUTE_CONSTANTS.LOGIN} element={IsAuth?<Navigate to={ROUTE_CONSTANTS.CABINET}/>:<Login />}></Route>
-             <Route path={ROUTE_CONSTANTS.REGISTER} element={IsAuth?<Navigate to={ROUTE_CONSTANTS.CABINET}/>:<Register />}></Route>
-             <Route path={ROUTE_CONSTANTS.CABINET} element={IsAuth?<Cabinet/>:<Navigate to={ROUTE_CONSTANTS.LOGIN}/>}></Route>
+             <Route path={ROUTE_CONSTANTS.LOGIN} element={IsAuth ? <Navigate to={ROUTE_CONSTANTS.CABINET}/> : <Login setIsAuth={setIsAuth}/>}></Route>
+             <Route path={ROUTE_CONSTANTS.REGISTER} element={IsAuth ? <Navigate to={ROUTE_CONSTANTS.CABINET}/> : <Register />}></Route>
+             <Route path={ROUTE_CONSTANTS.CABINET} element={IsAuth ? <Cabinet/> : <Navigate to={ROUTE_CONSTANTS.LOGIN}/>}></Route>
           </Route>
         )
       )
   }/>
+    </LoadingWrapper>
   )
 }
 export default App;

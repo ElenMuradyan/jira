@@ -1,4 +1,5 @@
 import './index.css';
+import AuthProfileDropDown from '../../sheard/AuthProfileDropDown';
 import { Button, Flex } from 'antd';
 
 const Header=()=>{
@@ -8,12 +9,11 @@ const Header=()=>{
        <p>Logo</p>
 
        <div>
-            <Button>
-                Sign In
-            </Button>
+<AuthProfileDropDown/>
        </div>
        </Flex>
     </div>
          );
 };
+
 export default Header;
