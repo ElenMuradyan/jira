@@ -1,5 +1,6 @@
 import { RouterProvider, createBrowserRouter, createRoutesFromElements, Route, Navigate } from "react-router-dom";
 import LoadingWrapper from "./components/sheard/LoadindWrapper";
+import { AuthContext } from "./context/authContextProvider";
 import { ROUTE_CONSTANTS } from "./core/utilis/constants";
 import { onAuthStateChanged } from 'firebase/auth';
 import { Login, Register } from './pages/auth';
@@ -22,7 +23,8 @@ const App=()=>{
   },[]);
 
   return (
-    <LoadingWrapper loading={loading}>
+    <AuthContext.Provider value={{ x:10, IsAuth }}>
+       <LoadingWrapper loading={loading}>
  <RouterProvider 
     router={
       createBrowserRouter(
@@ -36,6 +38,7 @@ const App=()=>{
       )
   }/>
     </LoadingWrapper>
+    </AuthContext.Provider>
   )
 }
 export default App;

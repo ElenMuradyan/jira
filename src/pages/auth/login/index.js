@@ -7,7 +7,7 @@ import AuthWrapper from '../../../components/sheard/AuthWrapper';
 import { useState } from 'react';
 import LoginBanner from '../../../core/Imgs/auth_login.jpg';
 
-const Login = () => {
+const Login = ({ setIsAuth }) => {
      const [ form ] = Form.useForm();
      const [ loading, setLoading ] = useState( false );
 
@@ -17,6 +17,7 @@ const Login = () => {
                 const { email, password } = values;
                 const response=await signInWithEmailAndPassword( auth, email, password );
                 form.resetFields();
+                setIsAuth(true);
                 }catch( error ){
                         notification.error({
                                 message:'Invalid Login Credentials', 
