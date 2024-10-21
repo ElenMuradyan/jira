@@ -1,11 +1,12 @@
 import React, { useState }  from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../../services/firebase";
+import { auth, db } from "../../../services/firebase";
 import { Form, Button, Input, Flex, notification } from 'antd';
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTE_CONSTANTS } from "../../../core/utilis/constants";
 import AuthWrapper from "../../../components/sheard/AuthWrapper";
 import RegisterBanner from "../../../core/Imgs/auth-register.jpg"
+import { setDoc, doc } from "firebase/firestore";
 
 const Register= () => {
     const [ form ] = Form.useForm();
@@ -14,9 +15,15 @@ const Register= () => {
 
     const handleRegister = async values => {
         setLoading(true);
+        const { firstName, lastName, email, password } = values;
         try{
-            const { email, password } = values;
-            await createUserWithEmailAndPassword( auth, email, password );
+            const response = await createUserWithEmailAndPassword( auth, email, password );
+            const { uid } = response.user;
+            const createDoc = doc(db, 'registeredUsers', uid);
+            await setDoc(createDoc, {
+                uid, firstName, lastName, email
+            });
+
             form.resetFields();
             navigate(ROUTE_CONSTANTS.LOGIN);
         }catch(error){
