@@ -1,6 +1,8 @@
 import { Avatar, Dropdown, Typography, Flex, theme } from "antd";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../services/firebase";
+import { useNavigate } from "react-router-dom";
+import { ROUTE_CONSTANTS } from "../../../core/utilis/constants";
 import './index.css';
 
 const { Text } = Typography;
@@ -8,6 +10,7 @@ const { useToken } = theme;
 
 const AuthProfileDropDown = () => {
     const { token } = useToken();
+    const navigate = useNavigate();
 
     const handleSignOut = async () => {
         try{
@@ -20,11 +23,13 @@ const AuthProfileDropDown = () => {
     const items = [
         {
             label: 'Profile',
-            key:'0'
+            key:'0',
+            onClick:() => navigate(ROUTE_CONSTANTS.PROFILE),
         },
         {
             label: 'Cabinet',
-            key:'1'
+            key:'1',
+            onClick:() => navigate(ROUTE_CONSTANTS.CABINET),
         },
         {
             label: 'Logout',

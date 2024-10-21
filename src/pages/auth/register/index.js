@@ -2,7 +2,7 @@ import React, { useState }  from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../services/firebase";
 import { Form, Button, Input, Flex, notification } from 'antd';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ROUTE_CONSTANTS } from "../../../core/utilis/constants";
 import AuthWrapper from "../../../components/sheard/AuthWrapper";
 import RegisterBanner from "../../../core/Imgs/auth-register.jpg"
@@ -10,6 +10,7 @@ import RegisterBanner from "../../../core/Imgs/auth-register.jpg"
 const Register= () => {
     const [ form ] = Form.useForm();
     const [ loading, setLoading ] = useState( false );
+    const navigate = useNavigate();
 
     const handleRegister = async values => {
         setLoading(true);
@@ -17,6 +18,7 @@ const Register= () => {
             const { email, password } = values;
             await createUserWithEmailAndPassword( auth, email, password );
             form.resetFields();
+            navigate(ROUTE_CONSTANTS.LOGIN);
         }catch(error){
             notification.error({
                 message:'Invalid Register Credentials'

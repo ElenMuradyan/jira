@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import {auth } from './services/firebase';
 import MainLayout from "./layouts/Main";
 import Cabinet from './pages/cabinet';
+import Profile from "./pages/profile";
 import "./styles/global.css";
 
 const App=()=>{
@@ -33,6 +34,7 @@ const App=()=>{
              <Route path={ROUTE_CONSTANTS.LOGIN} element={IsAuth ? <Navigate to={ROUTE_CONSTANTS.CABINET}/> : <Login setIsAuth={setIsAuth}/>}></Route>
              <Route path={ROUTE_CONSTANTS.REGISTER} element={IsAuth ? <Navigate to={ROUTE_CONSTANTS.CABINET}/> : <Register />}></Route>
              <Route path={ROUTE_CONSTANTS.CABINET} element={IsAuth ? <Cabinet/> : <Navigate to={ROUTE_CONSTANTS.LOGIN}/>}></Route>
+             <Route path={ROUTE_CONSTANTS.PROFILE} element={IsAuth ? <Profile/> : <Navigate to={ROUTE_CONSTANTS.LOGIN}/>}></Route>
           </Route>
         )
       )
