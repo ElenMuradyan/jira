@@ -1,4 +1,6 @@
 import { Avatar, Dropdown, Typography, Flex, theme } from "antd";
+import { signOut } from "firebase/auth";
+import { auth } from "../../../services/firebase";
 import './index.css';
 
 const { Text } = Typography;
@@ -6,6 +8,14 @@ const { useToken } = theme;
 
 const AuthProfileDropDown = () => {
     const { token } = useToken();
+
+    const handleSignOut = async () => {
+        try{
+            await signOut(auth);
+        }catch(error){
+            console.log(error);
+        }
+    };
 
     const items = [
         {
@@ -18,7 +28,8 @@ const AuthProfileDropDown = () => {
         },
         {
             label: 'Logout',
-            key:'2'
+            key:'logout',
+            onClick:handleSignOut,
         }
     ]
 
