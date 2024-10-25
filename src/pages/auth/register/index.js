@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../../services/firebase";
 import { Form, Button, Input, Flex, notification } from 'antd';
 import { Link, useNavigate } from "react-router-dom";
-import { ROUTE_CONSTANTS } from "../../../core/utilis/constants";
+import { ROUTE_CONSTANTS, FIRESTORE_PATH_NAMES } from "../../../core/utilis/constants";
 import AuthWrapper from "../../../components/sheard/AuthWrapper";
 import RegisterBanner from "../../../core/Imgs/auth-register.jpg"
 import { setDoc, doc } from "firebase/firestore";
@@ -19,7 +19,7 @@ const Register= () => {
         try{
             const response = await createUserWithEmailAndPassword( auth, email, password );
             const { uid } = response.user;
-            const createDoc = doc(db, 'registeredUsers', uid);
+            const createDoc = doc(db, FIRESTORE_PATH_NAMES.REGISTERED_USERS, uid);
             await setDoc(createDoc, {
                 uid, firstName, lastName, email
             });

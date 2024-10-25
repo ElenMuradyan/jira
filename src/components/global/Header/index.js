@@ -7,7 +7,7 @@ import { ROUTE_CONSTANTS } from '../../../core/utilis/constants';
 import './index.css';
 
 const Header=()=>{
-    const { IsAuth } = useContext(AuthContext);
+    const { IsAuth, userProfileInfo } = useContext(AuthContext);
 
     return(
     <div className="main_header">
@@ -16,7 +16,7 @@ const Header=()=>{
 
        <div>
         {
-           IsAuth ? <AuthProfileDropDown/> : <Link to={ROUTE_CONSTANTS.LOGIN}><Button>Sign in</Button></Link>
+           IsAuth ? <AuthProfileDropDown userProfileInfo={userProfileInfo}/> : <Link to={ROUTE_CONSTANTS.LOGIN}><Button>Sign in</Button></Link>
         }      
        </div>
        </Flex>

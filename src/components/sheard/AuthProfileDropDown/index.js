@@ -8,10 +8,16 @@ import './index.css';
 const { Text } = Typography;
 const { useToken } = theme; 
 
-const AuthProfileDropDown = () => {
+const AuthProfileDropDown = ({ userProfileInfo }) => {
     const { token } = useToken();
     const navigate = useNavigate();
 
+    const setFullNameLetter = ({ firstName, lastName }) => {
+        if (firstName && lastName){
+            return `${firstName[0]} ${lastName[0]}`;
+        };
+        return '-';
+    }
     const handleSignOut = async () => {
         try{
             await signOut(auth);
@@ -51,8 +57,8 @@ const AuthProfileDropDown = () => {
                   }}>
                     <Flex vertical align="center" style={{padding:token.sizeMS}} className="profile_dropdown_container">
                         <Avatar src='https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png'/>
-                        <Text>John Smith</Text>
-                        <Text type="secondary" underline>johnsmith@gmail.com</Text>
+                        <Text>{userProfileInfo.firstName} {userProfileInfo.lastName}</Text>
+                        <Text type="secondary" underline>{userProfileInfo.email}</Text>
                     </Flex>
                     {menu}
                 </div>
@@ -60,7 +66,7 @@ const AuthProfileDropDown = () => {
         }}
         >
             <Avatar size={"large"} className="user_profile_avatar">
-                J S
+                {setFullNameLetter(userProfileInfo)}
             </Avatar>
         </Dropdown>
     );
