@@ -18,6 +18,7 @@ const AuthProfileDropDown = ({ userProfileInfo }) => {
         };
         return '-';
     }
+
     const handleSignOut = async () => {
         try{
             await signOut(auth);
@@ -66,10 +67,10 @@ const AuthProfileDropDown = ({ userProfileInfo }) => {
         }}
         >
             <Avatar size={"large"} className="user_profile_avatar">
-                {setFullNameLetter(userProfileInfo)}
+                { setFullNameLetter(userProfileInfo) }
             </Avatar>
         </Dropdown>
     );
 };
 
-export default AuthProfileDropDown
+export default AuthProfileDropDown;

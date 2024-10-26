@@ -10,6 +10,7 @@ import { getDoc, doc } from "firebase/firestore";
 import MainLayout from "./layouts/Main";
 import Cabinet from './pages/cabinet';
 import Profile from "./pages/profile";
+import CabinetLayout from "./layouts/Cabinet";
 import "./styles/global.css";
 
 const App=()=>{
@@ -28,7 +29,7 @@ const App=()=>{
   useEffect(()=>{
 
   onAuthStateChanged(auth, (user) => {
-    user.uid && handleGetUserData(user.uid);
+    user?.uid && handleGetUserData(user.uid);
    
     setLoading(false);
     setIsAuth(Boolean(user));
@@ -43,10 +44,22 @@ const App=()=>{
       createBrowserRouter(
         createRoutesFromElements(
           <Route path='/' element={<MainLayout />}>
-             <Route path={ROUTE_CONSTANTS.LOGIN} element={IsAuth ? <Navigate to={ROUTE_CONSTANTS.CABINET}/> : <Login setIsAuth={setIsAuth}/>}></Route>
-             <Route path={ROUTE_CONSTANTS.REGISTER} element={IsAuth ? <Navigate to={ROUTE_CONSTANTS.CABINET}/> : <Register />}></Route>
-             <Route path={ROUTE_CONSTANTS.CABINET} element={IsAuth ? <Cabinet/> : <Navigate to={ROUTE_CONSTANTS.LOGIN}/>}></Route>
-             <Route path={ROUTE_CONSTANTS.PROFILE} element={IsAuth ? <Profile/> : <Navigate to={ROUTE_CONSTANTS.LOGIN}/>}></Route>
+             <Route path={ROUTE_CONSTANTS.LOGIN} 
+                    element={IsAuth ? <Navigate to={ROUTE_CONSTANTS.CABINET}/> : <Login setIsAuth={setIsAuth}/>}/>
+             <Route path={ROUTE_CONSTANTS.REGISTER}
+                    element={IsAuth ? <Navigate to={ROUTE_CONSTANTS.CABINET}/> : <Register />}/>
+
+
+             <Route 
+              path={ROUTE_CONSTANTS.CABINET}
+              element={IsAuth ? <CabinetLayout/> : <Navigate to={ROUTE_CONSTANTS.LOGIN}/>}
+             >
+                <Route 
+                  path={ROUTE_CONSTANTS.PROFILE} 
+                  element={<Profile/>}
+                />
+
+             </Route>
           </Route>
         )
       )
