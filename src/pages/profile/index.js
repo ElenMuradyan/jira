@@ -4,10 +4,13 @@ import { AuthContext } from '../../context/authContextProvider';
 import { FIRESTORE_PATH_NAMES } from '../../core/utilis/constants';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../services/firebase';
+import { useDispatch } from 'react-redux';
+import { increment, decrement } from '../../state-managment/slices/userProfile';
 
 import './index.css';
 
 const Profile = () => {
+    const dispatch = useDispatch();
     const { userProfileInfo, handleGetUserData } = useContext(AuthContext);
     const [ form ] = Form.useForm();
     const [ buttonLoading, setButtonLoading ] = useState(false);
@@ -36,7 +39,10 @@ const Profile = () => {
     }, [userProfileInfo, form])
 
     return (
-        <div>
+        <div className='form_page_container'>
+            <hr/>
+            <Button onClick={() => dispatch(decrement())}>-</Button>
+            <Button onClick={() => dispatch(increment())}>+</Button>
             <Form layout='vertical' form={form} onFinish={handleEditUserProfile}>
                 <Form.Item
                 label='Profile Image'
