@@ -6,7 +6,7 @@ import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../services/firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserProfileInfo } from '../../state-managment/slices/userProfile';
-import ImgUpload from '../../components/ImgUpload';
+import ImgUpload from '../../components/sheard/ImgUpload';
 import './index.css';
 
 const Profile = () => {
@@ -21,7 +21,7 @@ const Profile = () => {
         try{
             const userDocRef = doc(db, FIRESTORE_PATH_NAMES.REGISTERED_USERS, uid);
             await updateDoc(userDocRef, values);
-            dispatch(fetchUserProfileInfo);
+            dispatch(fetchUserProfileInfo());
             notification.success({
                 message:'user data successfully updated'
             })

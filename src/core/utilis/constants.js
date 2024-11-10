@@ -7,5 +7,9 @@ export const ROUTE_CONSTANTS={
     PROFILE:'/cabinet/profile',
 };
 export const FIRESTORE_PATH_NAMES = {
-    REGISTERED_USERS: 'registered_users'
+    REGISTERED_USERS: 'registered_users',
+}
+
+export const STORAGE_PATH_NAMES = {
+    PROFILE_IMAGES: 'profile_images'
 }

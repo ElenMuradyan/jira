@@ -3,7 +3,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../../services/firebase";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_CONSTANTS } from "../../../core/utilis/constants";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsAuth } from "../../../state-managment/slices/userProfile";
 
 import './index.css';
@@ -49,7 +49,7 @@ const AuthProfileDropDown = ({ userProfileInfo }) => {
             onClick:handleSignOut,
         }
     ]
-
+console.log(userProfileInfo.imgUrl)
     return (
         <Dropdown 
         menu={{ items }} 
@@ -62,7 +62,7 @@ const AuthProfileDropDown = ({ userProfileInfo }) => {
                     boxShadow: token.boxShadowSecondary,
                   }}>
                     <Flex vertical align="center" style={{padding:token.sizeMS}} className="profile_dropdown_container">
-                        <Avatar src='https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png'/>
+                        <Avatar src={userProfileInfo.imgUrl}/>
                         <Text>{userProfileInfo.firstName} {userProfileInfo.lastName}</Text>
                         <Text type="secondary" underline>{userProfileInfo.email}</Text>
                     </Flex>
@@ -77,5 +77,5 @@ const AuthProfileDropDown = ({ userProfileInfo }) => {
         </Dropdown>
     );
 };
-
+// 'https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png'
 export default AuthProfileDropDown;
