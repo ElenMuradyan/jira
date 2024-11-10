@@ -6,10 +6,12 @@ import { Link } from 'react-router-dom';
 import AuthWrapper from '../../../components/sheard/AuthWrapper';
 import { useState } from 'react';
 import LoginBanner from '../../../core/Imgs/auth_login.jpg';
-
-const Login = ({ setIsAuth }) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsAuth } from '../../../state-managment/slices/userProfile';
+const Login = () => {
      const [ form ] = Form.useForm();
      const [ loading, setLoading ] = useState( false );
+     const dispatch = useDispatch();
 
      const handleLogin = async values => {
                 setLoading( true );
@@ -17,7 +19,7 @@ const Login = ({ setIsAuth }) => {
                 const { email, password } = values;
                 const response=await signInWithEmailAndPassword( auth, email, password );
                 form.resetFields();
-                setIsAuth(true);
+                dispatch(setIsAuth(true));
                 }catch( error ){
                         notification.error({
                                 message:'Invalid Login Credentials', 
@@ -46,7 +48,7 @@ const Login = ({ setIsAuth }) => {
                 tooltip='Password must be min 6 max 16 characters .....'
                 rules={[{
                         required:true,
-                        message:'Enter your email'
+                        message:'Enter your password'
                 },
                 {
                 pattern:regexpValidation,

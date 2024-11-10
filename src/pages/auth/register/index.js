@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../../services/firebase";
 import { Form, Button, Input, Flex, notification } from 'antd';
 import { Link, useNavigate } from "react-router-dom";
-import { ROUTE_CONSTANTS, FIRESTORE_PATH_NAMES } from "../../../core/utilis/constants";
+import { ROUTE_CONSTANTS, FIRESTORE_PATH_NAMES, regexpValidation } from "../../../core/utilis/constants";
 import AuthWrapper from "../../../components/sheard/AuthWrapper";
 import RegisterBanner from "../../../core/Imgs/auth-register.jpg"
 import { setDoc, doc } from "firebase/firestore";
@@ -74,12 +74,17 @@ const Register= () => {
             rules={[{
                 required:true,
                 message:'Please input your password'
-            }]}
+            },
+            {
+                pattern:regexpValidation,
+                message:'The password must contain at least 6 to 16 characters, including at least one digit and one special character (e.g., !, @, #, $, %, ^, &, *).'
+            }
+        ]}
             >
             <Input.Password placeholder="Password"/>
             </Form.Item>
             <Form.Item
-            label='Config Password'
+            label='Confirm Password'
             name='confirm'
             dependencies={['password']}
             rules={[{

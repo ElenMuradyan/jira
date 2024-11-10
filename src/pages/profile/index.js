@@ -4,24 +4,24 @@ import { AuthContext } from '../../context/authContextProvider';
 import { FIRESTORE_PATH_NAMES } from '../../core/utilis/constants';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../services/firebase';
-import { useDispatch } from 'react-redux';
-import { increment, decrement } from '../../state-managment/slices/userProfile';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserProfileInfo } from '../../state-managment/slices/userProfile';
 
 import './index.css';
 
 const Profile = () => {
     const dispatch = useDispatch();
-    const { userProfileInfo, handleGetUserData } = useContext(AuthContext);
+    const { authUserInfo: { userData }} = useSelector(store => store.userProfile);
     const [ form ] = Form.useForm();
     const [ buttonLoading, setButtonLoading ] = useState(false);
-    const { uid, ...restData } = userProfileInfo;
+    const { uid, ...restData } = userData;
 
     const handleEditUserProfile = async (values) => {
         setButtonLoading(true);
         try{
             const userDocRef = doc(db, FIRESTORE_PATH_NAMES.REGISTERED_USERS, uid);
             await updateDoc(userDocRef, values);
-            handleGetUserData(uid);
+            dispatch(fetchUserProfileInfo);
             notification.success({
                 message:'user data successfully updated'
             })
@@ -36,13 +36,11 @@ const Profile = () => {
     
     useEffect(() => {
         form.setFieldsValue(restData);
-    }, [userProfileInfo, form])
+    }, [userData, form])
 
     return (
         <div className='form_page_container'>
             <hr/>
-            <Button onClick={() => dispatch(decrement())}>-</Button>
-            <Button onClick={() => dispatch(increment())}>+</Button>
             <Form layout='vertical' form={form} onFinish={handleEditUserProfile}>
                 <Form.Item
                 label='Profile Image'

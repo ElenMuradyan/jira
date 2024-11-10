@@ -8,18 +8,18 @@ import { useSelector } from 'react-redux';
 import './index.css';
 
 const Header=()=>{
-   const { count } = useSelector(store => store.userProfile);
-
-   const { IsAuth, userProfileInfo } = useContext(AuthContext);
+   const { authUserInfo: {isAuth, userData} } = useSelector(store => store.userProfile);
 
    return(
     <div className="main_header">
        <Flex justify="space-between" align="center">
-       <p>{ count }</p>
+       <div>
+         Logo
+       </div>
 
        <div>
         {
-           IsAuth ? <AuthProfileDropDown userProfileInfo={userProfileInfo}/> : <Link to={ROUTE_CONSTANTS.LOGIN}><Button>Sign in</Button></Link>
+           isAuth ? <AuthProfileDropDown userProfileInfo={userData}/> : <Link to={ROUTE_CONSTANTS.LOGIN}><Button>Sign in</Button></Link>
         }      
        </div>
        </Flex>
