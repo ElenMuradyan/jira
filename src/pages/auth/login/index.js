@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 import AuthWrapper from '../../../components/sheard/AuthWrapper';
 import { useState } from 'react';
 import LoginBanner from '../../../core/Imgs/auth_login.jpg';
-import { useDispatch, useSelector } from 'react-redux';
-import { setIsAuth } from '../../../state-managment/slices/userProfile';
+import { useDispatch } from 'react-redux';
+import { fetchUserProfileInfo } from '../../../state-managment/slices/userProfile';
 const Login = () => {
      const [ form ] = Form.useForm();
      const [ loading, setLoading ] = useState( false );
@@ -17,9 +17,9 @@ const Login = () => {
                 setLoading( true );
                 try{
                 const { email, password } = values;
-                const response=await signInWithEmailAndPassword( auth, email, password );
+                await signInWithEmailAndPassword( auth, email, password );
                 form.resetFields();
-                dispatch(setIsAuth(true));
+                dispatch(fetchUserProfileInfo());
                 }catch( error ){
                         notification.error({
                                 message:'Invalid Login Credentials', 

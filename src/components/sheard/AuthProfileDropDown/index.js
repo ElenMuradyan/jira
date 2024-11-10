@@ -3,12 +3,16 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../../services/firebase";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_CONSTANTS } from "../../../core/utilis/constants";
+import { useDispatch } from "react-redux";
+import { setIsAuth } from "../../../state-managment/slices/userProfile";
+
 import './index.css';
 
 const { Text } = Typography;
 const { useToken } = theme; 
 
 const AuthProfileDropDown = ({ userProfileInfo }) => {
+    const dispatch = useDispatch();
     const { token } = useToken();
     const navigate = useNavigate();
 
@@ -22,6 +26,7 @@ const AuthProfileDropDown = ({ userProfileInfo }) => {
     const handleSignOut = async () => {
         try{
             await signOut(auth);
+            dispatch(setIsAuth(false));
         }catch(error){
             console.log(error);
         }

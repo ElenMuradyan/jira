@@ -6,7 +6,7 @@ import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../services/firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserProfileInfo } from '../../state-managment/slices/userProfile';
-
+import ImgUpload from '../../components/ImgUpload';
 import './index.css';
 
 const Profile = () => {
@@ -45,7 +45,7 @@ const Profile = () => {
                 <Form.Item
                 label='Profile Image'
                 >
-                    <Upload></Upload>
+                    <ImgUpload/>
                 </Form.Item>
                 <Form.Item
                 label="First Name"
