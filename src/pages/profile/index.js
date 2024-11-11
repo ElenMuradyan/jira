@@ -1,20 +1,23 @@
-import { useContext, useEffect, useState } from 'react';
-import { Form, Input, Button, notification, Upload } from 'antd';
-import { AuthContext } from '../../context/authContextProvider';
-import { FIRESTORE_PATH_NAMES } from '../../core/utilis/constants';
+import { useEffect, useState } from 'react';
+import { Form, Input, Button, notification, message } from 'antd';
+import { FIRESTORE_PATH_NAMES, STORAGE_PATH_NAMES } from '../../core/utilis/constants';
 import { updateDoc, doc } from 'firebase/firestore';
-import { db } from '../../services/firebase';
+import { db, storage } from '../../services/firebase';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserProfileInfo } from '../../state-managment/slices/userProfile';
 import ImgUpload from '../../components/sheard/ImgUpload';
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { setProfieImgUrl, fetchUserProfileInfo } from '../../state-managment/slices/userProfile';
+
 import './index.css';
 
 const Profile = () => {
-    const dispatch = useDispatch();
+    const [ uploading, setUploading ] = useState(false);
+    const [ progress, setProgress ] = useState(0);
     const { authUserInfo: { userData }} = useSelector(store => store.userProfile);
     const [ form ] = Form.useForm();
     const [ buttonLoading, setButtonLoading ] = useState(false);
     const { uid, ...restData } = userData;
+    const dispatch = useDispatch();
 
     const handleEditUserProfile = async (values) => {
         setButtonLoading(true);
@@ -33,6 +36,45 @@ const Profile = () => {
             setButtonLoading(false)
         }
     }
+
+    const updateUserProfileImg = async (imgUrl) => {
+        try{
+            const userDocRef = doc ( db, FIRESTORE_PATH_NAMES.REGISTERED_USERS, uid);
+            await updateDoc(userDocRef, { imgUrl });
+        }catch{
+            notification.error({
+                message:'Error:('
+            })
+        }
+    }
+
+    const handleUpload = ({file}) => {
+        setUploading(true);
+        const storageRef = ref(storage, `${STORAGE_PATH_NAMES.PROFILE_IMAGES}/${uid}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on('state_changed', 
+            (snapshot) => {
+                const progressValue = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                setProgress(progressValue);
+        },
+        (error) => {
+            setUploading(false);
+            setProgress(0);
+            message.error(`Error uploading file ${error.message}`);
+        },
+        () => {
+            getDownloadURL(uploadTask.snapshot.ref)
+            .then((imgUrl) => {
+                setUploading(false);
+                setProgress(0);
+                updateUserProfileImg(imgUrl);
+                dispatch(setProfieImgUrl(imgUrl));
+                message.success('Upload successful');
+            })
+        }
+    )
+    };
     
     useEffect(() => {
         form.setFieldsValue(restData);
@@ -45,7 +87,11 @@ const Profile = () => {
                 <Form.Item
                 label='Profile Image'
                 >
-                    <ImgUpload/>
+                    <ImgUpload 
+                    progress={progress} 
+                    uploading={uploading} 
+                    handleUpload={handleUpload}
+                    />
                 </Form.Item>
                 <Form.Item
                 label="First Name"
