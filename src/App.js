@@ -8,6 +8,7 @@ import Profile from "./pages/profile";
 import CabinetLayout from "./layouts/Cabinet";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserProfileInfo } from "./state-managment/slices/userProfile";
+import Cabinet from "./pages/cabinet";
 
 import "./styles/global.css";
 
@@ -40,8 +41,10 @@ const App=()=>{
                           path={ROUTE_CONSTANTS.PROFILE} 
                           element={<Profile/>}
                         />
-
-                    </Route>
+                      <Route 
+                        path={ROUTE_CONSTANTS.CABINET} 
+                        element={<Cabinet/>}></Route>
+                        </Route>
                   </Route>
                 )
               )
