@@ -1,9 +1,19 @@
 import { Button } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddIssueModal from "../../components/sheard/IssueModal/Add";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchIssueData } from "../../state-managment/slices/issues";
 
-const Cabinet = () => {
+const Cabinet = () => {   
+    const dispatch = useDispatch();
     const [ showModal, setShwModal ] = useState(false);
+    const { data } = useSelector(store => store.issues);
+    console.log(data);
+    
+
+    useEffect(() => {
+        dispatch(fetchIssueData());
+    }, [dispatch]);
 
     const handleOpenModal = () => {
         setShwModal(true);

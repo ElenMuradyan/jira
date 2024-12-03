@@ -5,10 +5,13 @@ import { doc, setDoc } from "firebase/firestore";
 import { FIRESTORE_PATH_NAMES } from "../../../../core/utilis/constants";
 import { db } from "../../../../services/firebase";
 import { generateUid } from "../../../../core/helpers/generateUid";
+import { useDispatch } from "react-redux";
+import { fetchIssueData } from "../../../../state-managment/slices/issues";
 
 const AddIssueModal = ({ isOpen, onClose }) => {
     const [ buttonLoading, setButtonLoading ] = useState(false);
     const [ form ] = Form.useForm();
+    const dispatch = useDispatch();
 
     const handleCreateIssue = values => {
         setButtonLoading(true);
@@ -24,6 +27,7 @@ const AddIssueModal = ({ isOpen, onClose }) => {
             setDoc(issueRef, taskModel);
             onClose();
             form.resetFields();
+            dispatch(fetchIssueData());
             notification.success({
                 message: 'Your task has been created'
             })
