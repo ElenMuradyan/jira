@@ -3,14 +3,14 @@ import { useState, useEffect } from "react";
 import AddIssueModal from "../../components/sheard/IssueModal/Add";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchIssueData } from "../../state-managment/slices/issues";
+import EditIssueModal from "../../components/sheard/IssueModal/Edit";
 
 const Cabinet = () => {   
     const dispatch = useDispatch();
     const [ showModal, setShwModal ] = useState(false);
+    const [ editModalData, setEditModalData ] = useState(null);
     const { data } = useSelector(store => store.issues);
-    console.log(data);
     
-
     useEffect(() => {
         dispatch(fetchIssueData());
     }, [dispatch]);
@@ -30,6 +30,26 @@ const Cabinet = () => {
             </Button>
 
             <AddIssueModal isOpen={showModal} onClose={handleCloseModal}/>
+            {
+                Boolean(editModalData) && <EditIssueModal
+                isOpen={Boolean(editModalData)}
+                onClose={() => setEditModalData(null)}
+                data={editModalData}
+                />
+            }
+            <div>
+                <ul>
+                {
+                    data.map(item => {
+                        return(
+                            <li key={item.taskId} onClick={() => setEditModalData(item)}>
+                                {item.issueName}
+                            </li>
+                        )
+                    })
+                }
+                </ul>
+            </div>
         </div>
     )
 };

@@ -5,7 +5,8 @@ import { db } from "../../services/firebase";
 
 const initialState = {
     data: [],
-    isLoading: false
+    isLoading: false,
+    error: null,
 }
 
 export const fetchIssueData = createAsyncThunk(
@@ -28,6 +29,11 @@ const issueSlice = createSlice({
         .addCase(fetchIssueData.fulfilled, (state, action) => {
             state.data = action.payload;
             state.isLoading = false;
+        })
+        .addCase(fetchIssueData.rejected, (state, action) => {
+            state.isLoading = false;
+            state.data = [];
+            state.error = action.payload;
         })
     }
 })
