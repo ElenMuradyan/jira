@@ -7,6 +7,7 @@ import { db } from "../../../../services/firebase";
 import { generateUid } from "../../../../core/helpers/generateUid";
 import { useDispatch } from "react-redux";
 import { fetchIssueData } from "../../../../state-managment/slices/issues";
+import { taskStatuses } from "../../../../core/utilis/issues";
 
 const AddIssueModal = ({ isOpen, onClose }) => {
     const [ buttonLoading, setButtonLoading ] = useState(false);
@@ -20,6 +21,7 @@ const AddIssueModal = ({ isOpen, onClose }) => {
         const taskModel = {
             taskId,
             date: new Date().toLocaleTimeString(),
+            status: taskStatuses.TODO.key,
             ...values
         }
         try{
