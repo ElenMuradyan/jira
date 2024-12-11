@@ -1,5 +1,5 @@
 import { RouterProvider, createBrowserRouter, createRoutesFromElements, Route, Navigate } from "react-router-dom";
-import LoadingWrapper from "./components/sheard/LoadindWrapper";
+import LoadingWrapper from "./components/sheard/LoadingWrapper";
 import { ROUTE_CONSTANTS } from "./core/utilis/constants";
 import { Login, Register } from './pages/auth';
 import { useEffect } from 'react';

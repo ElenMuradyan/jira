@@ -5,7 +5,7 @@ import { db } from "../../services/firebase";
 import { transformIssueData } from "../../core/helpers/transformIssueData";
 
 const initialState = {
-    data: [],
+    data: {},
     isLoading: false,
     error: null,
 }
@@ -14,8 +14,8 @@ export const fetchIssueData = createAsyncThunk(
     'data/fetchIssueData',
     async () => {
         const queryData = await getDocs(collection(db, FIRESTORE_PATH_NAMES.ISSUES));
-        transformIssueData(queryData.docs.map((doc) => doc.data()))
-        return queryData.docs.map((doc) => doc.data());
+        const resultData = queryData.docs.map((doc) => doc.data());        
+        return transformIssueData(resultData);
     }
 )
 
