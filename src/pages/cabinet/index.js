@@ -1,4 +1,4 @@
-import { Button, Typography } from "antd";
+import { Button, Flex, Typography } from "antd";
 import { useState, useEffect } from "react";
 import AddIssueModal from "../../components/sheard/IssueModal/Add";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,10 +6,15 @@ import { fetchIssueData } from "../../state-managment/slices/issues";
 import EditIssueModal from "../../components/sheard/IssueModal/Edit";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import LoadingWrapper from "../../components/sheard/LoadingWrapper";
+import { ISSUE_OPTIONS } from "../../core/utilis/issues";
+import { changeIssueColumns } from "../../state-managment/slices/issues";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../services/firebase";
+import { FIRESTORE_PATH_NAMES } from "../../core/utilis/constants";
 
 import './index.css';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const Cabinet = () => {   
     const dispatch = useDispatch();
@@ -29,6 +34,54 @@ const Cabinet = () => {
         setShwModal(false);
     };
 
+    const handleChangeTaskStatus = async (result) => {
+        if(result.destination){
+            const { source, destination } = result;
+            const sourceArray = [...data[source.droppableId]]
+            let destinationArray = [...data[destination.droppableId]];
+
+            if(destination.droppableId === source.droppableId){
+                const [removedItem] = sourceArray.splice(source.index, 1);
+                sourceArray.splice(destination.index, 0, removedItem);
+            }else{
+                const [removeItem] = sourceArray.splice(source.index, 1);
+                destinationArray.splice(destination.index, 0, removeItem);    
+            }
+
+            try{
+                dispatch(changeIssueColumns({ source, destination }));
+                if(source.droppableId !== destination.droppableId){
+                for (let i = 0; i < destinationArray.length; i++) {
+                    const item = destinationArray[i];
+                    const docRef = doc(db, FIRESTORE_PATH_NAMES.ISSUES, item.taskId);
+                    
+                    await updateDoc(docRef, {
+                        status: destination.droppableId,
+                        taskIndex: i,
+                    })
+                }
+                for (let i = 0; i < sourceArray.length; i++) {
+                    const item = sourceArray[i];
+                    const docRef = doc(db, FIRESTORE_PATH_NAMES.ISSUES, item.taskId);
+                    
+                    await updateDoc(docRef, {
+                        taskIndex: i,
+                    })
+                }} else {
+                for(let item of sourceArray){  
+                    const docRef = doc(db, FIRESTORE_PATH_NAMES.ISSUES, item.taskId);
+                        await updateDoc(docRef, {
+                            status: destination.droppableId,
+                            taskIndex: sourceArray.indexOf(item),
+                        })
+                    }
+                }
+            }catch(e){
+                console.log(e);
+            }
+        }
+    };
+
     return(
         <div>
             <Button type='primary' onClick={handleOpenModal}>
@@ -45,7 +98,7 @@ const Cabinet = () => {
             }
             <div className="drag_context_container">
                <LoadingWrapper loading={isLoading}>
-                <DragDropContext>
+                <DragDropContext onDragEnd={handleChangeTaskStatus}>
                     {
                         Object.entries(data).map(([columnId, column]) => {
                             return(
@@ -84,8 +137,14 @@ const Cabinet = () => {
                                                                                         ref={provided.innerRef}
                                                                                         {...provided.draggableProps}
                                                                                         {...provided.dragHandleProps}
+                                                                                        onClick={() => setEditModalData(item)}
                                                                                         >
-                                                                                            Task                                                                                                                                                   
+                                                                                            <Flex>
+                                                                                                <Text>{item.issueName}</Text>
+                                                                                                <div>
+                                                                                                {ISSUE_OPTIONS[item.type]?.icon}
+                                                                                                </div>
+                                                                                            </Flex>                                                                                                                                                   
                                                                                         </div>
                                                                                     )
                                                                                 }

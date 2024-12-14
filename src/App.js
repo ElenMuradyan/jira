@@ -42,7 +42,7 @@ const App=()=>{
                           element={<Profile/>}
                         />
                       <Route 
-                        path={ROUTE_CONSTANTS.CABINET} 
+                       index
                         element={<Cabinet/>}></Route>
                         </Route>
                   </Route>

@@ -1,10 +1,10 @@
 import { Editor as EditorTinymce } from "@tinymce/tinymce-react";
 
-const Editor = ({ onEditorChange, value }) => {
+const Editor = ({ onChange, value }) => {
     return(
         <EditorTinymce
         height={300}
-        onEditorChange={onEditorChange}
+        onEditorChange={onChange}
         value={value}
         apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
         init={{

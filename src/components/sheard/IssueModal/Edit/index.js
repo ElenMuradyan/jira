@@ -32,7 +32,7 @@ const EditIssueModal = ({isOpen, data, onClose}) => {
 
     useEffect(() => {
         form.setFieldsValue(data)
-    });
+    }, [data]);
 
     return(
         <Modal

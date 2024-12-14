@@ -1,6 +1,4 @@
 import AuthProfileDropDown from '../../sheard/AuthProfileDropDown';
-import { useContext } from 'react';
-import { AuthContext } from '../../../context/authContextProvider';
 import { Flex, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import { ROUTE_CONSTANTS } from '../../../core/utilis/constants';
